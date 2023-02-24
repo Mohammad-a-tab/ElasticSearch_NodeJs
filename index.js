@@ -9,7 +9,7 @@ const {PORT} = process.env;
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.set("view engin", "ejs");
+app.set("view engine", "ejs");
 app.use(ExpressEjsLayouts);
 app.set("views", "views");
 app.set("layout", "./layouts/master");
