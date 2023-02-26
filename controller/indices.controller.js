@@ -8,10 +8,9 @@ class IndicesController {
             if(!indexName) throw createHttpError.BadRequest("Invalid value of index name");
             const results = await elasticClient.indices.create({index : indexName});
             return res.status(HttpStatus.CREATED).json({
-                results,
                 statusCode : HttpStatus.CREATED,
                 data : {
-                    message : "Index is created-_-"
+                    results
                 }
             })
         } catch (error) {
