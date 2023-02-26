@@ -1,9 +1,9 @@
 const ExpressEjsLayouts = require("express-ejs-layouts");
-const { AllRoutes } = require("./router/router");
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 require("dotenv").config()
+const { AllRoutes } = require("./router/router");
 const {PORT} = process.env;
 
 app.use(express.static("public"));
