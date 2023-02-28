@@ -1,6 +1,5 @@
 const {StatusCodes : HttpStatus} = require("http-status-codes");
 const { elasticClient } = require("../config/elastic.config");
-const createHttpError = require("http-errors");
 const indexBlog = "blog"
 class BlogController {
     async getAllBlogs (req, res, next) {
@@ -52,7 +51,7 @@ class BlogController {
             next(error)
         }
     }
-    async updateDocument (req, res, next) {
+    async updateBlog (req, res, next) {
         try {
             const {id} = req.params;
             const data = req.body;
@@ -64,7 +63,7 @@ class BlogController {
                 id,
                 doc: data
             })
-            return res.status().json(updateResult)
+            return res.status(HttpStatus.OK).json(updateResult)
         } catch (error) {
             next(error)
         }
