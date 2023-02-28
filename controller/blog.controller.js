@@ -70,7 +70,7 @@ class BlogController {
     }
     async searchByTitle (req, res, next) {
         try {
-            const {title} = req.params;
+            const {title} = req.query;
             const result = await elasticClient.search({
                 index: indexBlog,
                 query: {
@@ -86,7 +86,17 @@ class BlogController {
     }
     async searchByMultiField (req, res, next) {
         try {
-            
+            const {search} = req.query;
+            const result = await elasticClient.search({
+                index: indexBlog,
+                query: {
+                    multi_match: {
+                        query: search,
+                        fields: ["title", "text", "author"]
+                    }
+                }
+            });
+            return res.status(HttpStatus.OK).json(result.hits.hits)
         } catch (error) {
             next(error)
         }
