@@ -54,17 +54,17 @@ class BlogController {
     }
     async updateDocument (req, res, next) {
         try {
-            const {title, id} = req.body;
-            const updateResults = await elasticClient.updateByQuery({
+            const {id} = req.params;
+            const data = req.body;
+            Object.keys(data).forEach(key => {
+                if(!data[key]) delete data[key]
+            });
+            const updateResult = await elasticClient.update({
                 index: indexBlog,
-                query: {
-                    match : {
-                        title
-                    },
-                    
-                }
-            },{id : id});
-            return res.json(updateResults)
+                id,
+                doc: data
+            })
+            return res.status().json(updateResult)
         } catch (error) {
             next(error)
         }
