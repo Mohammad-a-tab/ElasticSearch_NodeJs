@@ -38,7 +38,33 @@ class BlogController {
     }
     async removeBlog (req, res, next) {
         try {
-            
+            const {id} = req.params;
+            const deletedResult = await elasticClient.deleteByQuery({
+                index : indexBlog,
+                query : {
+                    match : {
+                        _id : id
+                    }
+                }
+            });
+            return res.status(HttpStatus.OK).json(deletedResult)
+        } catch (error) {
+            next(error)
+        }
+    }
+    async updateDocument (req, res, next) {
+        try {
+            const {title, id} = req.body;
+            const updateResults = await elasticClient.updateByQuery({
+                index: indexBlog,
+                query: {
+                    match : {
+                        title
+                    },
+                    
+                }
+            },{id : id});
+            return res.json(updateResults)
         } catch (error) {
             next(error)
         }
