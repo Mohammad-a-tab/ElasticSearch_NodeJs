@@ -70,7 +70,16 @@ class BlogController {
     }
     async searchByTitle (req, res, next) {
         try {
-            
+            const {title} = req.params;
+            const result = await elasticClient.search({
+                index: indexBlog,
+                query: {
+                    match: {
+                        title
+                    }
+                }
+            });
+            return res.status(HttpStatus.OK).json(result.hits.hits)
         } catch (error) {
             next(error)
         }
