@@ -5,7 +5,12 @@ const indexBlog = "blog"
 class BlogController {
     async getAllBlogs (req, res, next) {
         try {
-            
+            const value = req.params.value
+            const blogs = await elasticClient.search({
+                index : indexBlog,
+                q: value
+            });
+            return res.status(HttpStatus.OK).json(blogs.hits.hits)
         } catch (error) {
             next(error)
         }
