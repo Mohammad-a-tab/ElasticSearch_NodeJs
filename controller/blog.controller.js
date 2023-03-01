@@ -103,10 +103,41 @@ class BlogController {
     }
     async searchByRegexp (req, res, next) {
         try {
-            
+            const {search} = req.query;
+            const result = await elasticClient.search({
+                index: indexBlog,
+                query: {
+                    regexp: {
+                        title: `.*${search}.*`
+                    }
+                }
+            });
+            return res.status(HttpStatus.OK).json(result.hits.hits)
         } catch (error) {
             next(error)
         }
+    }
+    async searchByRegexpMultiField(req, res, next) {
+        const {search} = req.query;
+        const result = await elasticClient.search({
+            index: indexBlog,
+            query: {
+                bool: {
+                    should: [
+                        {
+                            regexp: {title: `.*${search}.*`}
+                        },
+                        {
+                            regexp: {text: `.*${search}.*`}
+                        },
+                        {
+                            regexp: {author: `.*${search}.*`}
+                        }
+                    ]
+                }
+            }
+        });
+        return res.status(HttpStatus.OK).json(result.hits.hits)
     }
 }
 module.exports = {
